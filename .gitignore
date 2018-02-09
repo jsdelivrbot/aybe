@@ -1,0 +1,7 @@
+# ignore a single file
+index.html
+whatever.html
+#ignore folder
+index_OLD.html
+/index_files/
+/*/
