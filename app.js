@@ -1,3 +1,5 @@
+/*GLOBAL VARIABLES*/
+let alertArray =[];
 /*Init function*/
 (function() {
  'use strict';
@@ -167,7 +169,7 @@ function review_ticket() {
   getMainWindow.appendChild(reviewWindow);
 
   //Additional
-  const array_of_items = ["<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Country <br><a class='wiki_aybe' target='_blank' href='https://wiki.vip.corp.ebay.com/display/COEDM/9.+Campaigns'>Wiki</a>","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Admin Campaign <br> <a class='wiki_aybe' target='_blank' href='https://wiki.vip.corp.ebay.com/display/COEDM/Campaign+Types'>Wiki</a>","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Requested type <br><a class='wiki_aybe' target='_blank' href='https://wiki.vip.corp.ebay.com/display/COEDM/9.+Campaigns'>Wiki</a>","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Correct Complexity <br><a href='https://wiki.vip.corp.ebay.com/pages/viewpage.action?pageId=352537594' target='_blank' class='wiki_aybe'>Wiki</a>","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Department","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Campaign Type <br> <a class='wiki_aybe' target='_blank' href='https://wiki.vip.corp.ebay.com/display/COEDM/Campaign+Types'>Wiki</a>","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Number of Email Contents","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> MC Contents <br> <a class='wiki_aybe' href='https://wiki.vip.corp.ebay.com/display/COEDM/Campaign+Building+in+MC' target='_blank'>Wiki</a>","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> If Recurring (check recurrence frequency)","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Dynamic Contents <br><a class='wiki_aybe' target='_blank' href='https://wiki.vip.corp.ebay.com/display/COEDM/Dynamic+Fields'>Wiki</a>","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Subject Line Options <br> <a class='wiki_aybe' target='_blank' href='https://wiki.vip.corp.ebay.com/pages/viewpage.action?pageId=368165102'>Wiki</a>","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Litmus Tracking <br><a class='wiki_aybe' target='_blank' href='https://wiki.vip.corp.ebay.com/display/COEDM/Litmus+Testing'>Wiki</a>","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Coupon <br> <a class='wiki_aybe' target='_blank' href='https://wiki.vip.corp.ebay.com/display/COEDM/Coupons#e9790545f13f47c6b854bb1d5b732f08'>Wiki</a>","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Subjet Lines <br> <a target='_blank' href='https://wiki.vip.corp.ebay.com/pages/viewpage.action?pageId=417917662' class='wiki_aybe'>Wiki</a>","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Description","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Personalized Fields","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Attachments"];
+  const array_of_items = ["<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Country <br><a class='wiki_aybe' target='_blank' href='https://wiki.vip.corp.ebay.com/display/COEDM/9.+Campaigns'>Wiki</a>","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Admin Campaign <br> <a class='wiki_aybe' target='_blank' href='https://wiki.vip.corp.ebay.com/display/COEDM/Campaign+Types'>Wiki</a>","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Requested type <br><a class='wiki_aybe' target='_blank' href='https://wiki.vip.corp.ebay.com/display/COEDM/9.+Campaigns'>Wiki</a>","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Correct Complexity <br><a href='https://wiki.vip.corp.ebay.com/pages/viewpage.action?pageId=352537594' target='_blank' class='wiki_aybe'>Wiki</a>","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Department","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Campaign Type <br> <a class='wiki_aybe' target='_blank' href='https://wiki.vip.corp.ebay.com/display/COEDM/Campaign+Types'>Wiki</a>","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Number of Email Contents","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> MC Contents <br> <a class='wiki_aybe' href='https://wiki.vip.corp.ebay.com/display/COEDM/Campaign+Building+in+MC' target='_blank'>Wiki</a>","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> If Recurring (check recurrence frequency)","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Dynamic Contents <br><a class='wiki_aybe' target='_blank' href='https://wiki.vip.corp.ebay.com/display/COEDM/Dynamic+Fields'>Wiki</a>","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Subject Line Options <br> <a class='wiki_aybe' target='_blank' href='https://wiki.vip.corp.ebay.com/pages/viewpage.action?pageId=368165102'>Wiki</a>","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Litmus Tracking <br><a class='wiki_aybe' target='_blank' href='https://wiki.vip.corp.ebay.com/display/COEDM/Litmus+Testing'>Wiki</a>","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Coupon <br> <a class='wiki_aybe' target='_blank' href='https://wiki.vip.corp.ebay.com/display/COEDM/Coupons#e9790545f13f47c6b854bb1d5b732f08'>Wiki</a>","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Subjet Lines <br> <a target='_blank' href='https://wiki.vip.corp.ebay.com/pages/viewpage.action?pageId=417917662' class='wiki_aybe'>Wiki</a>","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Description","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Personalized Fields","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Attachments","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> ZIP File Check","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Do I have all?"];
   const create_ul = document.createElement("ul");
   create_ul.setAttribute("id","sparc_list")
   let final_string = "";
@@ -184,23 +186,44 @@ function review_ticket() {
 }
 function checkBoxItemCare() {
   const reviewCheckBoxes = document.getElementsByClassName("reviewTicketCheckBox");
-  const lengthOfCheckBoxes = reviewCheckBoxes.length;
-  console.log(reviewCheckBoxes);
+  let lengthOfCheckBoxes = reviewCheckBoxes.length;
+  console.log(lengthOfCheckBoxes);
   Array.from(reviewCheckBoxes).forEach(function(element) {
       element.addEventListener('click', itemKiller);
     });
     function itemKiller(){
+
       this.parentElement.style.background = "#51df5f5e";
       this.checked = true;
     let this_item = this;
-    lengthOfCheckBoxes - 1;
+    let final_length = lengthOfCheckBoxes -= 1;
+    appearAnything(final_length);
+    alertThrower(final_length);
+    this.removeEventListener("click",itemKiller);
       setTimeout(function () {
         this_item.parentElement.remove();
       }, 1000);
-console.log(lengthOfCheckBoxes);
+console.log(final_length);
+if (final_length <= 0){
+  tutorialMessage("Good Job! Did you check also assets? I can help you with that!");
+  setTimeout(function () {
+    clearThemAll();
+  }, 5000);
+}
     }
 
 }
+function appearAnything(items){
+const get_window = document.getElementById("window_content");
+const create_div = document.createElement("div");
+create_div.setAttribute("class","appearanything");
+create_div.innerHTML = items;
+get_window.appendChild(create_div);
+setTimeout(function () {
+  create_div.remove();
+}, 1000);
+}
+
 /*
 ============================
 ============================
@@ -325,6 +348,7 @@ function aybe(){
  window_content.appendChild(option_space);
  optionController();
  aybeSwitcher();
+ alertWindow();
 }
 /*
 Displays options from aybe() function according domain name
@@ -412,7 +436,8 @@ let white_everything = document.getElementsByClassName('value inactive');
   const selectFirstOption = document.getElementById('aybe_select_options').options;
   console.log(selectFirstOption);
     selectFirstOption.selectedIndex = 0;
-
+    alertArray = [];
+alertWindow();
 }
 /*Here are full styles of aYbe, nowhere else can be styles written*/
 function loadStyles(){
@@ -430,8 +455,9 @@ function loadStyles(){
  const wiki_styles = ".wiki_aybe{font-size:8px;text-transform:uppercase;color:grey;}";
  const custom_aybe_scrollbar = "#window_content::-webkit-scrollbar{width:8px;background-color: white;}#window_content::-webkit-scrollbar-thumb{background-color: #e53238;}#window_content::-webkit-scrollbar-track{-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);background-color: #F5F5F5;}"
  const log_messages = ".error_message_class{text-align:left;}.tutorial_message_class{text-align:left;border-bottom:1px solid black;padding:0px;font-size:11px;}.tutorial_headline{font-weight:bold;font-size:13px;color:#132456;font-style:italic;}";
-
- style_app.innerHTML = log_messages+custom_aybe_scrollbar+ wiki_styles+jump_window+sparc_number+ul_li+dialog_window+open_close+select_styles + ".ahojky{overflow-y: scroll;overflow-x: hidden;max-height:350px;box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);border-radius:6px;padding:20px;position:fixed;top:0px;right:0px;width:200px;height:auto;border:3px solid rgba(255,255,255,0.1);background-color:rgba(255,255,255,0.4);z-index:9999}.ahojky:hover{background-color:rgba(255,255,255,0.8);}" + option_styles;
+const appearBox = ".appearanything{position: absolute;top: 20%; left: 50%;font-size: 30px;font-weight: bold; color: #00c6d699;text-decoration: underline; font-size: 45px;padding: 15px; border: 5px solid #00C6D699; border-radius: 50%;}";
+const alertBox = "#alertBox{position:absolute;top:0;right:10px;width:20px;line-height:20px;vertical-align:middle;background:red;text-align:center;border-radius:50%;color:#f4FF00;font-weight:bold;cursor:pointer;}"
+ style_app.innerHTML = alertBox+appearBox+log_messages+custom_aybe_scrollbar+ wiki_styles+jump_window+sparc_number+ul_li+dialog_window+open_close+select_styles + ".ahojky{overflow-y: scroll;overflow-x: hidden;max-height:350px;box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);border-radius:6px;padding:20px;position:fixed;top:0px;right:0px;width:200px;height:auto;border:3px solid rgba(255,255,255,0.1);background-color:rgba(255,255,255,0.4);z-index:9999}.ahojky:hover{background-color:rgba(255,255,255,0.8);}" + option_styles;
 
 if(typeof first_div === "undefined"){
   first_div = document.getElementsByTagName("body")[0];
@@ -467,4 +493,16 @@ function tutorialMessage(message){
   create_li.setAttribute("class","log_li");
   create_li.innerHTML = "<h3 class='tutorial_headline'>What to do...</h3>"+message;
   create_ul.appendChild(create_li);
+}
+function alertWindow() {
+  const get_window = document.getElementById("window_content");
+  const create_div = document.createElement("div");
+  create_div.setAttribute("id","alertBox");
+  get_window.appendChild(create_div);
+}
+function alertThrower(item) {
+  const alertDiv = document.getElementById("alertBox");
+  alertArray.push(item);
+  alertDiv.innerHTML = alertArray.length;
+  console.log(alertArray);
 }
