@@ -194,12 +194,10 @@ function checkBoxItemCare() {
       element.addEventListener('click', itemKiller);
     });
     function itemKiller(){
-
       this.parentElement.style.background = "#51df5f5e";
       this.checked = true;
     let this_item = this;
     let final_length = lengthOfCheckBoxes -= 1;
-    appearAnything(final_length);
     this.removeEventListener("click",itemKiller);
       setTimeout(function () {
         this_item.parentElement.remove();
@@ -214,27 +212,39 @@ if (final_length <= 0){
     }
 
 }
-function appearAnything(items){
-const get_window = document.getElementById("window_content");
-const create_div = document.createElement("div");
-create_div.setAttribute("class","appearanything");
-create_div.innerHTML = items;
-get_window.appendChild(create_div);
-setTimeout(function () {
-  create_div.remove();
-}, 1000);
-}
+
 function automatizedTicketReview() {
-  const couponCheck = document.getElementsByClassName("label-container");
-  const couponCheckInput = document.getElementById("emCoupon").children[0].checked;
-console.log(couponCheckInput);
-  for (var i = 0; i < couponCheck.length; i++) {
-    if ((couponCheck[i].innerText === "Coupon") && (couponCheckInput === false)) {
-    console.log("Coupon is Not Checked");
-  }else if ((couponCheck[i].innerText === "Coupon") && (couponCheckInput === true)) {
-    alertThrower("Careful, this is coupon! This Campaign will have Tollgate and needs to be scheduled first 5% (or % which is specified by CM) after approval.");
-  }
-  }
+
+//IF coupon
+  (function() {
+    'use strict';
+    const couponCheck = document.getElementsByClassName("label-container"); //coupon
+    const couponCheckInput = document.getElementById("emCoupon").children[0].checked;//coupon
+    const mcCheckInput = document.getElementById("emEmail");//Message Center requested
+    const mcExpirationDate = document.getElementById("emEmail");//Message Center requested
+  console.log(couponCheckInput);
+    for (var i = 0; i < couponCheck.length; i++) {
+      if ((couponCheck[i].innerText.trim() === "Coupon") && (couponCheckInput === true)) {
+      alertThrower("Careful, this is coupon! This Campaign will have Tollgate and needs to be scheduled first 5% (or % which is specified by CM) after approval.");
+    }
+    }
+  }());
+  //MC Expiration Date if requested
+  (function() {
+    'use strict';
+    const labelForCheck = document.getElementsByClassName("label-container"); //coupon
+    const mcCheckInput = document.getElementById("emEmail");//Message Center requested
+    const mcExpirationDate = document.getElementById("emEmail");//Message Center requested
+  console.log(labelForCheck);
+    for (var i = 0; i < labelForCheck.length; i++) {
+      if ((labelForCheck[i].innerText.trim() === "Email Contents") && (mcCheckInput.innerText.trim() != "")) {
+      alertThrower("MC is requested");
+    }
+    }
+  }());
+  //Are Assets Missing?
+  //Is that a Admin Campaign?
+  //Is Complexity ok?
 }
 /*
 ============================
@@ -361,6 +371,7 @@ function aybe(){
  optionController();
  aybeSwitcher();
  alertWindow();
+ modalWindowPreparation();
 }
 /*
 Displays options from aybe() function according domain name
@@ -381,7 +392,7 @@ function optionController(){
 /*IF email assets*/
  else if (domain_path.match(/file/g)) {
    const read_file = document.getElementById("load_to_sparc").remove();
-   const hide_download_ticket_option = document.getElementById("download_ticket_data").remove();
+  // const hide_download_ticket_option = document.getElementById("download_ticket_data").remove();
   // const hide_review_ticket_data = document.getElementById("review_ticket_data").remove();
  }
 }
@@ -469,7 +480,7 @@ function loadStyles(){
  const log_messages = ".error_message_class{text-align:left;}.tutorial_message_class{text-align:left;border-bottom:1px solid black;padding:0px;font-size:11px;}.tutorial_headline{font-weight:bold;font-size:13px;color:#132456;font-style:italic;}";
 const appearBox = ".appearanything{position: absolute;top: 20%; left: 50%;font-size: 30px;font-weight: bold; color: #00c6d699;text-decoration: underline; font-size: 45px;padding: 15px; border: 5px solid #00C6D699; border-radius: 50%;}";
 const alertBox = "#alertBox{position:absolute;top:0;right:10px;width:20px;line-height:20px;vertical-align:middle;background:#03a9f4;text-align:center;border-radius:50%;color:#ffffff;font-weight:bold;cursor:pointer;}"
-const modalAlertBox ="#modalWindowForAlert{color: #ffffffab;background: #000000a3;position:fixed;left:30%;top:50%;width:500px;word-wrap:break-word;padding:14px;}#modalWindowForAlert ul>li{list-style-type:none !important;}#modalWindowForAlert ul{padding:0px;margin:0px;}#closeModalWindowForAlert{position:absolute;right:7px;top:0px;padding:0px;margin:0px;color:red;font-weight:bold;font-size:20px;cursor:pointer;}";
+const modalAlertBox ="#modalWindowForAlert{color:#ffffffc9;background: #1577e7a3;position:fixed;left:30%;top:50%;width:500px;word-wrap:break-word;padding:14px;border: 1px solid;box-shadow: inset 0px 0px 2px 3px;}#modalWindowForAlert ul>li{list-style-type:none !important;}#modalWindowForAlert ul{padding:0px;margin:0px;}#closeModalWindowForAlert{position:absolute;right:7px;top:0px;padding:0px;margin:0px;color:red;font-weight:bold;font-size:20px;cursor:pointer;}";
  style_app.innerHTML = modalAlertBox+alertBox+appearBox+log_messages+custom_aybe_scrollbar+ wiki_styles+jump_window+sparc_number+ul_li+dialog_window+open_close+select_styles + ".ahojky{overflow-y: scroll;overflow-x: hidden;max-height:350px;box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);border-radius:6px;padding:20px;position:fixed;top:0px;right:0px;width:200px;height:auto;border:3px solid rgba(255,255,255,0.1);background-color:rgba(255,255,255,0.4);z-index:9999}.ahojky:hover{background-color:rgba(255,255,255,0.8);}" + option_styles;
 
 if(typeof first_div === "undefined"){
@@ -518,33 +529,55 @@ function alertThrower(item) {
   alertArray.push(item);
   alertDiv.innerHTML = alertArray.length;
   console.log(alertArray);
-  itemAlertShow();
 }
 function itemAlertShow() {
   const clickOnAlertBox = document.getElementById("alertBox");
   clickOnAlertBox.addEventListener("click",modalFunction);
   function modalFunction() {
-    const create_div = document.createElement("div");
-    const killAlertBox = document.createElement("div");
-    killAlertBox.setAttribute("id","closeModalWindowForAlert");
-    killAlertBox.innerHTML = "X";
-    create_div.setAttribute("id","modalWindowForAlert");
-    const create_ul = document.createElement("ul");
-    const create_li = document.createElement("li");
-    document.body.appendChild(create_div);
-    create_div.appendChild(killAlertBox);
-    create_div.appendChild(create_ul);
-    create_ul.appendChild(create_li);
+const getModalWindow = document.getElementById("modalWindowForAlert");
+getModalWindow.style.display = "block";
+const create_li = document.createElement("div");
+getModalWindow.appendChild(create_li);
 for (var i = 0; i < alertArray.length; i++) {
-  create_li.innerHTML = i +". "+ alertArray[i];
+create_li.innerHTML += "<li>"+ alertArray[i] + "</li>";
+}
+clickOnAlertBox.removeEventListener("click",modalFunction);
+  }
+}
+function modalWindowPreparation() {
+const create_div = document.createElement("div");
+const killAlertBox = document.createElement("div");
+killAlertBox.setAttribute("id","closeModalWindowForAlert");
+killAlertBox.innerHTML = "&#x02297;";
+
+create_div.setAttribute("id","modalWindowForAlert");
+create_div.style.display = "none";
+document.body.appendChild(create_div);
+create_div.appendChild(killAlertBox);
+itemAlertShow();
+}
+
+/*
+const create_div = document.createElement("div");
+const killAlertBox = document.createElement("div");
+killAlertBox.setAttribute("id","closeModalWindowForAlert");
+killAlertBox.innerHTML = "&#x02297;";
+create_div.setAttribute("id","modalWindowForAlert");
+const create_ul = document.createElement("ul");
+const create_li = document.createElement("li");
+document.body.appendChild(create_div);
+create_div.appendChild(killAlertBox);
+create_div.appendChild(create_ul);
+for (var i = 0; i < alertArray.length; i++) {
+create_li.innerHTML += i +". "+ alertArray[i];
+create_ul.appendChild(create_li);
 }
 clickOnAlertBox.removeEventListener("click",modalFunction);
 killAlertBox.addEventListener("click",killModalFunction);
 function killModalFunction() {
-  const selectAlert = document.getElementById("modalWindowForAlert");
-  selectAlert.remove();
-  const clickOnAlertBox = document.getElementById("alertBox");
-  clickOnAlertBox.addEventListener("click",modalFunction);
+const selectAlert = document.getElementById("modalWindowForAlert");
+selectAlert.remove();
+const clickOnAlertBox = document.getElementById("alertBox");
+clickOnAlertBox.addEventListener("click",modalFunction);
 }
-  }
-}
+*/
