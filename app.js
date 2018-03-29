@@ -11,7 +11,7 @@ let alertArray =[];
 //preventAnyClicks();//Disallow any unwanted clicks
 loadStyles(); //load Styles first
 createWindow(); // Load window after
-sparcInputsController() // This function controlls all inputs
+sparcInputsController(); // This function controlls all inputs
 
 /*
 ============*SPARC*==============
@@ -38,7 +38,7 @@ prevent.addEventListener("click",function(e){
 ============================
 */
 /*
-Controller of inputs
+Controller of main selection input
 */
 function sparcInputsController(){
  'use strict';
@@ -61,6 +61,8 @@ mainDebugger()
      mainDebugger()
    }else if (results === "check_assets") {
      checkAssets();
+   }else if (results === "mc_helper") {
+     message_center_helper();
    }
  }
 }
@@ -268,8 +270,15 @@ function checkAllTheLinks() {
   const valid_links = [];
   const invalid_links = [];
   const empty_links = [];
+  const targets = [];
+  let counter_for_target = 0;
+  let target_index_finder = 0;
+  let target_index_array = [];
   for (var i = 0; i < all_links.length; i++) {
   arr_links.push(all_links[i].href);
+  if (all_links[i].hasAttribute("target")) {
+    targets.push(all_links[i].getAttribute("target"));
+  }
   //this condition catches all the domain extensions, which are valid.
   //d
   if(((arr_links.toString()).endsWith(".com"))
@@ -317,18 +326,130 @@ function checkAllTheLinks() {
     all_links[i].style.background = "red";
   }
   }
-  console.log("Valid Links");
-  console.log(valid_links);
+  /*Check for missing _blank*/
+
+  for (var i = 0; i < targets.length; i++) {
+    target_index_finder++;
+
+    if(!(targets[i].toString().match("_blank"))){
+      counter_for_target++;
+      target_index_array.push(target_index_finder);
+    }
+  }
+  logMessage("<span style='color:blue'>I found " + all_links.length + " links in total!</span>");
+  logMessage("<span style='color:purple'>I found " + counter_for_target + " link/s that does not have target _blank! And "+(all_links.length - targets.length )+" completely missing target!</span>");
   logMessage("<span style='color:green'>I found " + valid_links.length + " links, which are OK!</span>");
-  console.log("Invalid Links");
-  console.log(invalid_links);
   logMessage("<span style='color:orange'>I found " + invalid_links.length + " links, which might have problem with backslash!</span>");
-  console.log("Empty Links");
-  console.log(empty_links);
   logMessage("<span style='color:red'>I found " + empty_links.length + " links, which are empty!</span>");
-  console.log("Full Array");
-  console.log(arr_links);
 }
+/*
+============================
+============================
+===Message Center MODULE====
+**MC HELPER**
+**SETUP PROTECTION**
+============================
+============================
+*/
+function message_center_helper() {
+create_message_center_window();
+}
+function create_message_center_window() {
+  
+const getMainWindow = document.getElementById("window_content");
+const createDiv = document.createElement("div");
+createDiv.setAttribute("id","message_center_helper");
+getMainWindow.appendChild(createDiv);
+
+(function() {
+  'use strict';
+  const createInput = document.createElement("input"); // Creates input for MC helper
+  createInput.setAttribute("id","mc_input");
+  createInput.placeholder = "Insert .dat file here...";
+  createDiv.appendChild(createInput);
+  const createAlertBox = document.createElement("div");
+  createAlertBox.setAttribute("id","alert_paragraph_jarda");
+  createDiv.appendChild(createAlertBox);
+  const createCopyButton = document.createElement("button");
+  createCopyButton.setAttribute("id","copy_button");
+  createCopyButton.innerHTML = "Copy";
+  createDiv.appendChild(createCopyButton);
+  const createOutputDiv = document.createElement("div");
+  createOutputDiv.setAttribute("id", "outputbox");
+  createOutputDiv.innerHTML = "";
+  createDiv.appendChild(createOutputDiv);
+  mc_helper_logic();
+}());
+}
+function mc_helper_logic() {
+  console.log("i work");
+const mc_list = document.getElementById("distFileID"); //selects options in MC
+const mc_length = mc_list.length; //gets options in MC length
+const mc_text = mc_list.options[mc_list.selectedIndex].text; //Loads text at selected index
+/*Search for the dat file logic*/
+const search_field = document.getElementById("mc_input");
+/*
+Couple of logs;
+*/
+search_field.oninput = function(){
+lookForSimilarFiles();
+     const alert_paragraph_jarda = document.getElementById("alert_paragraph_jarda").innerHTML = " ";
+    let counter = 0;
+    let search_string = search_field.value;
+
+  for(i = 0;i<mc_length;i++){
+      counter ++;
+    let mc_value = mc_list.options[i].text;
+    if(mc_value == search_field.value.toString().trim()){
+        mc_list.selectedIndex = counter - 1;
+        alert_paragraph_jarda = document.getElementById("alert_paragraph_jarda").innerHTML = "<hr><span style='color:green;font-weight:bold;'>I found it! YaY!</span>";
+        break;
+
+    }
+     else if((search_field.value).length <= 0){
+             alert_paragraph_jarda = document.getElementById("alert_paragraph_jarda").innerHTML = "<hr><span style='color: rgb(112, 94, 1);font-weight:bold;'>You forgot to fill up .dat file!</span>";
+} else if (counter >= mc_length) {
+  alert_paragraph_jarda = document.getElementById("alert_paragraph_jarda").innerHTML = "<hr><span style='color: rgb(112, 94, 1);font-weight:bold;'>Nah, I am blind I guess :-(</span>";
+ }
+
+}
+
+};
+function lookForSimilarFiles() {
+let final_pattern = /,/gi;
+let arr_for_indexes = [];
+let counter_for_index = 0;
+const outputwindow = document.getElementById("outputbox");
+let regpattern = new RegExp(search_field.value,"g");
+
+for (let f = 0; f < mc_length; f++) {
+  counter_for_index++;
+  if ((mc_list[f].text).match(regpattern)) {
+      arr_for_indexes.push(mc_list[counter_for_index-1].innerText);
+
+  }else {
+    console.log("this index has nothing!");
+  }
+}
+
+let stringFromArray = arr_for_indexes.toString().replace(final_pattern,"<br>");
+outputwindow.innerHTML = stringFromArray;
+const text_for_clipboard = document.getElementById("outputbox");
+const copy_results = document.getElementById("copy_button");
+copy_results.onclick = function(){
+const range = document.createRange();
+ let selection = window.getSelection();
+ selection.removeAllRanges();
+ range.selectNodeContents(text_for_clipboard);
+ selection.addRange(range);
+ document.execCommand('copy');
+ copy_results.innerHTML = "Copied to clipboard!"
+}
+}
+
+}//Main Function ends
+
+
 /*
 ============================
 ============================
@@ -362,10 +483,11 @@ function aybe(){
  const option_delete_sparc_data = "<option value='delete_sparc_data'>DELETE This Data</option>";
  const option_load_read_file = "<option value='read_file' id='load_to_sparc'>Load Sparc To Emarsys</option>";
  const option_check_assets = "<option value='check_assets' id='asset_checker'>Check This HTML</option>";
+ const option_message_center_helper = "<option value='mc_helper' id='mc_helper'>Run MC Helper</option>";
  const option_space = document.createElement("div");
  option_space.setAttribute("class","options_of_aybe");
  option_space.setAttribute("id", "id_of_options")
- option_space.innerHTML = "<select id='aybe_select_options'>" + option_do_noting + option_review_ticket + option_get_sparc_data + option_load_read_file+ option_check_assets+"</select>";
+ option_space.innerHTML = "<select id='aybe_select_options'>" + option_do_noting + option_review_ticket + option_get_sparc_data + option_load_read_file+ option_check_assets+option_message_center_helper+"</select>";
  const window_content = document.getElementById("window_content");
  window_content.appendChild(option_space);
  optionController();
@@ -469,10 +591,10 @@ function loadStyles(){
    console.log(style_app);
  let first_div = document.getElementsByTagName("div")[0];
  const option_styles = "#id_of_options select{display:block;margin: 0 auto;}";
- const select_styles = "#aybe_select_options{padding: 4px;border-radius: 6px;color: #545454 !important;font-weight: bold;border: 2px solid #0bb1f1;}";
+ const select_styles = "#aybe_select_options,#mc_input{padding: 4px;border-radius: 6px;color: #545454 !important;font-weight: bold;border: 2px solid #0bb1f1;}#mc_input{margin:0 auto;border:solid 1px;display:block;margin-top:5px;}";
  const open_close = "#open_close {right: 0px;width: 200px;position: fixed;text-align: center;padding: 20px;top: 65px;color: red;font-size: 20px;font-weight: bold;}.open_close_class{border: 2px solid black;padding: 6px;border-radius: 50%;color: red;border-color: #ff0303;cursor: pointer;z-index: 9999;}"
  const dialog_window = "#dialog_space{font-size:11px;color:green;display:block;text-align:center;font-weight:bold}";
- const ul_li = ".reviewTicketCheckBox{margin:0;vertical-align:middle;position:absolute;left:23px;}#sparc_list li{text-align: center;font-weight: 900;font-size: 11px;padding: 4px;margin-bottom: 3px;cursor: pointer;height: 30px;border: 2px solid #0bb1f1;margin-top: 3px;} ul#sparc_list{list-style-type:none;padding: 0px;}";
+ const ul_li = ".reviewTicketCheckBox{margin:0;vertical-align:middle;position:absolute;left:23px;cursor:alias;}#sparc_list li{text-align: center;font-weight: 900;font-size: 11px;padding: 4px;margin-bottom: 3px;cursor: pointer;height: 30px;border: 2px solid #0bb1f1;margin-top: 3px;} ul#sparc_list{list-style-type:none;padding: 0px;}";
  const sparc_number = "#numberOfSparcItems{text-align:center}";
  const jump_window = "#jump_window{position: absolute;top: 22px;left: 8px;font-size: 18px;font-weight: bold;cursor: pointer;color: #32b6f7;}";
  const wiki_styles = ".wiki_aybe{font-size:8px;text-transform:uppercase;color:grey;}";
@@ -481,7 +603,8 @@ function loadStyles(){
 const appearBox = ".appearanything{position: absolute;top: 20%; left: 50%;font-size: 30px;font-weight: bold; color: #00c6d699;text-decoration: underline; font-size: 45px;padding: 15px; border: 5px solid #00C6D699; border-radius: 50%;}";
 const alertBox = "#alertBox{position:absolute;top:0;right:10px;width:20px;line-height:20px;vertical-align:middle;background:#03a9f4;text-align:center;border-radius:50%;color:#ffffff;font-weight:bold;cursor:pointer;}"
 const modalAlertBox ="#modalWindowForAlert{color:#ffffffc9;background: #1577e7a3;position:fixed;left:30%;top:50%;width:500px;word-wrap:break-word;padding:14px;border: 1px solid;box-shadow: inset 0px 0px 2px 3px;}#modalWindowForAlert ul>li{list-style-type:none !important;}#modalWindowForAlert ul{padding:0px;margin:0px;}#closeModalWindowForAlert{position:absolute;right:7px;top:0px;padding:0px;margin:0px;color:red;font-weight:bold;font-size:20px;cursor:pointer;}";
- style_app.innerHTML = modalAlertBox+alertBox+appearBox+log_messages+custom_aybe_scrollbar+ wiki_styles+jump_window+sparc_number+ul_li+dialog_window+open_close+select_styles + ".ahojky{overflow-y: scroll;overflow-x: hidden;max-height:350px;box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);border-radius:6px;padding:20px;position:fixed;top:0px;right:0px;width:200px;height:auto;border:3px solid rgba(255,255,255,0.1);background-color:rgba(255,255,255,0.4);z-index:9999}.ahojky:hover{background-color:rgba(255,255,255,0.8);}" + option_styles;
+const buttonForMC = "#copy_button{display:block;margin: 0 auto;margin-top: 5px;background: white;padding: 4px;border-radius: 6px;color: #545454 !important;font-weight: bold; border: 2px solid #0bb1f1;}"
+ style_app.innerHTML = buttonForMC+modalAlertBox+alertBox+appearBox+log_messages+custom_aybe_scrollbar+ wiki_styles+jump_window+sparc_number+ul_li+dialog_window+open_close+select_styles + ".ahojky{overflow-y: scroll;overflow-x: hidden;max-height:350px;box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);border-radius:6px;padding:20px;position:fixed;top:0px;right:0px;width:200px;height:auto;border:3px solid rgba(255,255,255,0.1);background-color:rgba(255,255,255,0.4);z-index:9999}.ahojky:hover{background-color:rgba(255,255,255,0.8);}" + option_styles;
 
 if(typeof first_div === "undefined"){
   first_div = document.getElementsByTagName("body")[0];
@@ -549,35 +672,66 @@ const create_div = document.createElement("div");
 const killAlertBox = document.createElement("div");
 killAlertBox.setAttribute("id","closeModalWindowForAlert");
 killAlertBox.innerHTML = "&#x02297;";
-
 create_div.setAttribute("id","modalWindowForAlert");
 create_div.style.display = "none";
 document.body.appendChild(create_div);
 create_div.appendChild(killAlertBox);
 itemAlertShow();
+closeModalWindowForAlert();
 }
 
+function closeModalWindowForAlert() {
+  const closeModalWindowForAlert = document.getElementById("closeModalWindowForAlert");
+  closeModalWindowForAlert.addEventListener("click",function() {
+    const killModal = document.getElementById("modalWindowForAlert").remove();
+    const getAndChangeAlertBox = document.getElementById("alertBox").innerHTML = "0";
+  });
+}
+
+
+/*||||||||||||||||||||||||||||*/
+/*||||||||||||||||||||||||||||*/
+/*-----INVASIVE FUNCTIONS*-----/
+/*||||||||||||||||||||||||||||*/
+/*||||||||||||||||||||||||||||*/
 /*
-const create_div = document.createElement("div");
-const killAlertBox = document.createElement("div");
-killAlertBox.setAttribute("id","closeModalWindowForAlert");
-killAlertBox.innerHTML = "&#x02297;";
-create_div.setAttribute("id","modalWindowForAlert");
-const create_ul = document.createElement("ul");
-const create_li = document.createElement("li");
-document.body.appendChild(create_div);
-create_div.appendChild(killAlertBox);
-create_div.appendChild(create_ul);
-for (var i = 0; i < alertArray.length; i++) {
-create_li.innerHTML += i +". "+ alertArray[i];
-create_ul.appendChild(create_li);
+Follwing functions are not triggered by selecting specific option item.
+These functions will check URL, and if URL passes specific condition,
+function will be immediately called right after document load itself.
+*/
+
+(function() {//init invasive function
+  'use strict';
+mainMcSetupProtection();
+}());
+function mainMcSetupProtection() {
+const readMcUrl = document.location.href.toString();
+if (readMcUrl.match("file") || (readMcUrl.match(""))) {
+try {
+console.log("MC Protection is triggered");
+const getAllInputs = document.getElementsByTagName("input");
+for (var i = 8; i < 13; i++) {
+
+  console.log(getAllInputs[i].checked);
+  if (getAllInputs[i].checked === false) {
+    const getMcButton = document.getElementById("CampaignSetupConfirmSubmit");
+    getMcButton.addEventListener("click",function(e) {
+      e.preventDefault();
+    });
+  }
 }
-clickOnAlertBox.removeEventListener("click",modalFunction);
-killAlertBox.addEventListener("click",killModalFunction);
-function killModalFunction() {
-const selectAlert = document.getElementById("modalWindowForAlert");
-selectAlert.remove();
-const clickOnAlertBox = document.getElementById("alertBox");
-clickOnAlertBox.addEventListener("click",modalFunction);
+
+} catch (e) {
+console.log(e);
 }
+}else {
+  console.log("Invasive MC is not tirggered!");
+}
+}
+/*
+============================
+============================
+====MC SETUP Protection=====
+============================
+============================
 */

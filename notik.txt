@@ -1,0 +1,1 @@
+https://cs.ebay.com/ws/eBayAdmin.dll?CampaignSetupConfirm&actionName=CampaignSetupConfirmShow&templateID=44494&campaignType=
