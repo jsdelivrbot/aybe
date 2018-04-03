@@ -1,5 +1,5 @@
 /*
-VERSION - Option list fixed! 
+VERSION 222222, update test
 */
 /*GLOBAL VARIABLES*/
 let alertArray =[];
