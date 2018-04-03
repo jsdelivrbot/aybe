@@ -8,7 +8,7 @@ let alertArray =[];
  Functions related to SPARC Only
 ============*SPARC*==============
  */
-//preventAnyClicks();//Disallow any unwanted clicks
+
 loadStyles(); //load Styles first
 createWindow(); // Load window after
 sparcInputsController(); // This function controlls all inputs
@@ -22,14 +22,7 @@ Functions related to SPARC Only
 /*
 Protects DEV agains anwanted clicks
 */
-function preventAnyClicks(){
- console.log("This document is click-prevented");
- let prevent = document;
-prevent.addEventListener("click",function(e){
- e.preventDefault();
- console.log("prevented clicks");
-});
-}
+
 /*
 ============================
 ============================
@@ -461,7 +454,7 @@ const range = document.createRange();
 Appends aYbe window to the first div in DOM.
 */
 function createWindow(){
-const first_div = document.getElementsByTagName("div")[0];
+const first_div = document.getElementsByTagName("body")[0];
 const create_div = document.createElement("div");
 create_div.setAttribute("class","ahojky");
 create_div.setAttribute("id","window_content");
@@ -589,7 +582,7 @@ function loadStyles(){
 
  const style_app = document.createElement("style");
    console.log(style_app);
- let first_div = document.getElementsByTagName("div")[0];
+ let first_div = document.getElementsByTagName("body")[0];
  const option_styles = "#id_of_options select{display:block;margin: 0 auto;}";
  const select_styles = "#aybe_select_options,#mc_input{padding: 4px;border-radius: 6px;color: #545454 !important;font-weight: bold;border: 2px solid #0bb1f1;}#mc_input{margin:0 auto;border:solid 1px;display:block;margin-top:5px;}";
  const open_close = "#open_close {right: 0px;width: 200px;position: fixed;text-align: center;padding: 20px;top: 65px;color: red;font-size: 20px;font-weight: bold;}.open_close_class{border: 2px solid black;padding: 6px;border-radius: 50%;color: red;border-color: #ff0303;cursor: pointer;z-index: 9999;}"
