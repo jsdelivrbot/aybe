@@ -355,7 +355,7 @@ function message_center_helper() {
 create_message_center_window();
 }
 function create_message_center_window() {
-  
+
 const getMainWindow = document.getElementById("window_content");
 const createDiv = document.createElement("div");
 createDiv.setAttribute("id","message_center_helper");
@@ -699,35 +699,6 @@ Follwing functions are not triggered by selecting specific option item.
 These functions will check URL, and if URL passes specific condition,
 function will be immediately called right after document load itself.
 */
-
-(function() {//init invasive function
-  'use strict';
-mainMcSetupProtection();
-}());
-function mainMcSetupProtection() {
-const readMcUrl = document.location.href.toString();
-if (readMcUrl.match("file") || (readMcUrl.match(""))) {
-try {
-console.log("MC Protection is triggered");
-const getAllInputs = document.getElementsByTagName("input");
-for (var i = 8; i < 13; i++) {
-
-  console.log(getAllInputs[i].checked);
-  if (getAllInputs[i].checked === false) {
-    const getMcButton = document.getElementById("CampaignSetupConfirmSubmit");
-    getMcButton.addEventListener("click",function(e) {
-      e.preventDefault();
-    });
-  }
-}
-
-} catch (e) {
-console.log(e);
-}
-}else {
-  console.log("Invasive MC is not tirggered!");
-}
-}
 /*
 ============================
 ============================
