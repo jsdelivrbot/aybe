@@ -41,17 +41,13 @@ function sparcInputsController(){
    console.log(results);
    if (results === "get_localstorage_data"){
    loadDataAndSave();
-   mainDebugger()
    }else if(results === "read_file"){
      readData();
      doubleDivPolice();
-     mainDebugger()
    }else if(results === "review_ticket"){
 review_ticket();
-mainDebugger()
    }else if (results === "do_nothing") {
      clearThemAll();
-     mainDebugger()
    }else if (results === "check_assets") {
      checkAssets();
    }else if (results === "mc_helper") {
@@ -155,7 +151,8 @@ If Recurring, Dynamic contents, Subject Line Options, Litmus Tracking, Coupon, S
 Do I have all the info I need from Campaign manager?
 */
 function review_ticket() {
-
+  alertWindow();
+  modalWindowPreparation();
   let checkInput = "<input type='checkbox' class='reviewTicketCheckBox'>";
   const getMainWindow = document.getElementById("window_content");
   //Create main container
@@ -485,31 +482,49 @@ function aybe(){
  window_content.appendChild(option_space);
  optionController();
  aybeSwitcher();
- alertWindow();
- modalWindowPreparation();
+ // alertWindow();
+ // modalWindowPreparation();
 }
 /*
 Displays options from aybe() function according domain name
 */
 function optionController(){
+  /*
+--> ALL FREAKING OPTIONS <---
+
+  */
  const domain_path = window.location.href;
  /*IF EMARSYS*/
  if(domain_path.match(/broadcast/g)){
    const hide_download_ticket_option = document.getElementById("download_ticket_data").remove();
    const hide_review_ticket_data = document.getElementById("review_ticket_data").remove();
    const hide_check_assets = document.getElementById("asset_checker").remove();
+    const mc_helper = document.getElementById("mc_helper").remove();
+   // const read_file = document.getElementById("load_to_sparc").remove();
    displayMessages();
    /*IF SPARC*/
  }else if (domain_path.match(/helpdesk/g) || domain_path.match(/127/g)) {
    const read_file = document.getElementById("load_to_sparc").remove();
    const hide_check_assets = document.getElementById("asset_checker").remove();
+   const mc_helper = document.getElementById("mc_helper").remove();
+   // const hide_download_ticket_option = document.getElementById("download_ticket_data").remove();
+   // const hide_review_ticket_data = document.getElementById("review_ticket_data").remove();
  }
 /*IF email assets*/
  else if (domain_path.match(/file/g)) {
    const read_file = document.getElementById("load_to_sparc").remove();
-  // const hide_download_ticket_option = document.getElementById("download_ticket_data").remove();
-  // const hide_review_ticket_data = document.getElementById("review_ticket_data").remove();
- }
+   const hide_download_ticket_option = document.getElementById("download_ticket_data").remove();
+   const hide_review_ticket_data = document.getElementById("review_ticket_data").remove();
+   const mc_helper = document.getElementById("mc_helper").remove();
+ // const hide_check_assets = document.getElementById("asset_checker").remove();
+   /*If Message Center*/
+}else if (domain_path.match(/CampaignSetup/g)) {
+  const hide_download_ticket_option = document.getElementById("download_ticket_data").remove();
+  const hide_review_ticket_data = document.getElementById("review_ticket_data").remove();
+  const hide_check_assets = document.getElementById("asset_checker").remove();
+  const read_file = document.getElementById("load_to_sparc").remove();
+  // const mc_helper = document.getElementById("mc_helper").remove();
+}
 }
 
 function displayMessages() {
