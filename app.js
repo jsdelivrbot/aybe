@@ -1,3 +1,6 @@
+/*
+VERSION - Option list fixed! 
+*/
 /*GLOBAL VARIABLES*/
 let alertArray =[];
 /*Init function*/
