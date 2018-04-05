@@ -210,20 +210,47 @@ function automatizedTicketReview() {
   }());
   //MC Expiration Date if requested
   (function() {
+
     'use strict';
-    const labelForCheck = document.getElementsByClassName("label-container"); //coupon
-    const mcCheckInput = document.getElementById("emEmail");//Message Center requested
-    const mcExpirationDate = document.getElementById("emEmail");//Message Center requested
-  console.log(labelForCheck);
-    for (var i = 0; i < labelForCheck.length; i++) {
-      if ((labelForCheck[i].innerText.trim() === "Email Contents") && (mcCheckInput.innerText.trim() != "")) {
-      alertThrower("MC is requested");
-    }
-    }
+    const getMCValue = document.querySelector("[field-name='emEmail']");
+    const getMCExpiration = document.querySelector("[field-name='emExpiryDate']");
+if (getMCValue.getAttribute("field-value") !== "" && (getMCExpiration.getAttribute("field-value") === "")){
+alertThrower("MC is requested, but expiration date is missing");
+}
   }());
   //Are Assets Missing?
+  (function() {
+    'use strict';
+    const getAttachmentParentElement = document.getElementById("file_attachments").children.length;
+    if(getAttachmentParentElement < 1){
+      alertThrower("Assets are missing!");
+    }
+  }());
   //Is that a Admin Campaign?
+  (function() {
+    'use strict';
+const isAdmin = document.querySelector("[name='adminCampaign']").checked;
+if (isAdmin === true) {
+  alertThrower("This is admin campaign - Auto Filter Recipients checkbox needs to be unticked in Emarsys and also correct Admin footer to be chosen");
+}
+  }());
   //Is Complexity ok?
+  //Litmus Tracking
+  (function() {
+    'use strict';
+const isLitmus = document.querySelector("[name='emLitmusTracking']").checked;
+if (isLitmus === true) {
+  alertThrower("Litmus is checked, please, when building campaign, follow <a href='https://wiki.vip.corp.ebay.com/display/COEDM/LITMUS+Tracking+in+Email+Campaigns' target='_blank'>Wiki for Emarsys</a>,<a href='https://wiki.vip.corp.ebay.com/display/COEDM/LITMUS+Tracking+in+MC+Campaigns' target='_blank'>Wiki for MC(if requested)</a>.");
+}
+  }());
+  //if recurring - naming convention
+  (function() {
+    'use strict';
+    const isReccuring = document.querySelector("[field-name='emRequestType']").getAttribute("field-value-name");
+    if (isReccuring !== "Ad-hoc") {
+      alertThrower("This is Recurring campaign. 2 emarsys IDs need to be created. 1st Adhoc one with 'AH' in ID name and 2nd with 'RE' in ID name.")
+    }
+  }());
 }
 /*
 ============================
@@ -234,7 +261,7 @@ function automatizedTicketReview() {
 */
 function checkAssets(){
   console.log("Checking Assets");
-  tutorialMessage("Please, look at highlighted links in HTML file. <br> <span style='color:green'>Green color</span> = good<br> <span style='color:purple'>Purple color</span> = WRONG!<br><span style='color:orange'>Orange</span> color = warning<br><span style='color:red'>Red</span> color - Almost 100% problem<br><span style='color:violet'>Violet</span> color - Read at <a href='https://wiki.vip.corp.ebay.com/pages/viewpage.action?pageId=204420980' target='_blank'>Wiki</a>");
+  tutorialMessage("Please, look at highlighted links in HTML file. <br> <span style='color:green'>Green color</span> = good<br> <span style='color:purple'>Purple color</span> = WRONG!<br><span style='color:orange'>Orange</span> color = warning<br><span style='color:red'>Red</span> color - Almost 100% problem<br><span style='color:violet'>Violet</span> color - Read at <a style='border:0px solid' href='https://wiki.vip.corp.ebay.com/pages/viewpage.action?pageId=204420980' target='_blank'>Wiki</a>");
   checkAllTheLinks();
 }
 /*This function checks forget
@@ -248,15 +275,27 @@ function checkAllTheLinks() {
   const invalid_links = [];
   const empty_links = [];
   const targets = [];
+  const noTargets = [];
   const whitelists = [];
+  const deadAttributes = [];
 
   let counter_for_target = 0;
   let target_index_finder = 0;
   let target_index_array = [];
+  let notarget_counter = 0;
   for (var i = 0; i < all_links.length; i++) {
   arr_links.push(all_links[i].href);
+//  deadAttributes.push(all_links[i].attributes);
+  for (var k = 0; k < all_links[i].attributes.length; k++) {
+  deadAttributes.push(all_links[i].attributes[k].value);
+  }
+
   if (all_links[i].hasAttribute("target")) {
     targets.push(all_links[i].getAttribute("target"));
+  }
+  if (all_links[i].hasAttribute("target") === false) {
+    notarget_counter ++;
+    noTargets.push("<br>("+(notarget_counter -1)+") "+all_links[i].href);
   }
   if(!((all_links[i].href).toLowerCase().match("ebay"))){
     whitelists.push(all_links[i].href);
@@ -316,7 +355,7 @@ function checkAllTheLinks() {
 
     if(!(targets[i].toString().match("_blank"))){
       counter_for_target++;
-      target_index_array.push(target_index_finder);
+      target_index_array.push(target_index_finder -1);
     }
   }
   let white_listed_strings = "";
@@ -326,12 +365,22 @@ function checkAllTheLinks() {
       white_listed_strings += "<span style='color:black;font-weight:900'> ("+(i + 1)+ ") </span>" + whitelists[i] + "<br><br>";
     }
   }
+//  console.log(deadAttributes);
+  /*How Many deadAttributes*/
+  let invalidAttributes = 0;
+  for (var i = 0; i < deadAttributes.length; i++) {
+    if(deadAttributes[i] === "#"){
+      invalidAttributes++;
+    }
+  }
+  noTargets.shift();
   logMessage("<span style='color:blue'>I found " + all_links.length + " links in total!</span>");
-  logMessage("<span style='color:purple'>I found " + counter_for_target + " link/s that does not have target _blank! And "+(all_links.length - targets.length )+" completely missing target!</span>");
+  logMessage("<span style='color:purple'>I found " + (counter_for_target - 1) + " link/s that does not have target _blank! And "+((all_links.length - targets.length)-1 )+" completely missing target!</span><br><span style='color:grey;font-size:9px;word-wrap: break-word;'>"+noTargets.toString()+"</span>");
   logMessage("<span style='color:green'>I found " + valid_links.length + " links, which are OK!</span>");
   logMessage("<span style='color:orange'>I found " + invalid_links.length + " links, which might have problem with backslash!</span>");
   logMessage("<span style='color:red'>I found " + empty_links.length + " links, which are empty!</span>");
  logMessage("<span style='color:violet'>I found " + whitelists.length + " links to be whitelisted!</span><br><span style='color:grey;font-size:9px;word-wrap: break-word;'>"+white_listed_strings+"</span>");
+logMessage("<span style='color:gold'>I found " + invalidAttributes + " invalid attributes - they are empty or contains '#'");
 }
 /*
 ============================
@@ -515,7 +564,7 @@ function optionController(){
  else if (domain_path.match(/file/g)) {
    const read_file = document.getElementById("load_to_sparc").remove();
    const hide_download_ticket_option = document.getElementById("download_ticket_data").remove();
-   const hide_review_ticket_data = document.getElementById("review_ticket_data").remove();
+   //const hide_review_ticket_data = document.getElementById("review_ticket_data").remove();
    const mc_helper = document.getElementById("mc_helper").remove();
  // const hide_check_assets = document.getElementById("asset_checker").remove();
    /*If Message Center*/
