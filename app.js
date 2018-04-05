@@ -1,31 +1,15 @@
 /*
-VERSION 222222, update test
+VERSION 1.0.3 (HTML CHECKER UDPATED);
 */
 /*GLOBAL VARIABLES*/
 let alertArray =[];
 /*Init function*/
 (function() {
  'use strict';
- /*
-============*SPARC*==============
- Functions related to SPARC Only
-============*SPARC*==============
- */
-
 loadStyles(); //load Styles first
 createWindow(); // Load window after
 sparcInputsController(); // This function controlls all inputs
-
-/*
-============*SPARC*==============
-Functions related to SPARC Only
-============*SPARC*==============
-*/
 }());
-/*
-Protects DEV agains anwanted clicks
-*/
-
 /*
 ============================
 ============================
@@ -250,7 +234,7 @@ function automatizedTicketReview() {
 */
 function checkAssets(){
   console.log("Checking Assets");
-  tutorialMessage("Please, look at highlighted links in HTML file. <br> <span style='color:green'>Green color</span> = good<br> <span style='color:orange'>Orange</span> color = warning<br><span style='color:red'>Red</span> color - Almost 100% problem");
+  tutorialMessage("Please, look at highlighted links in HTML file. <br> <span style='color:green'>Green color</span> = good<br> <span style='color:purple'>Purple color</span> = WRONG!<br><span style='color:orange'>Orange</span> color = warning<br><span style='color:red'>Red</span> color - Almost 100% problem<br><span style='color:violet'>Violet</span> color - Read at <a href='https://wiki.vip.corp.ebay.com/pages/viewpage.action?pageId=204420980' target='_blank'>Wiki</a>");
   checkAllTheLinks();
 }
 /*This function checks forget
@@ -264,6 +248,8 @@ function checkAllTheLinks() {
   const invalid_links = [];
   const empty_links = [];
   const targets = [];
+  const whitelists = [];
+
   let counter_for_target = 0;
   let target_index_finder = 0;
   let target_index_array = [];
@@ -271,6 +257,9 @@ function checkAllTheLinks() {
   arr_links.push(all_links[i].href);
   if (all_links[i].hasAttribute("target")) {
     targets.push(all_links[i].getAttribute("target"));
+  }
+  if(!((all_links[i].href).toLowerCase().match("ebay"))){
+    whitelists.push(all_links[i].href);
   }
   //this condition catches all the domain extensions, which are valid.
   //d
@@ -320,6 +309,7 @@ function checkAllTheLinks() {
   }
   }
   /*Check for missing _blank*/
+  /*Also check for links that needs to be whitelisted*/
 
   for (var i = 0; i < targets.length; i++) {
     target_index_finder++;
@@ -329,11 +319,19 @@ function checkAllTheLinks() {
       target_index_array.push(target_index_finder);
     }
   }
+  let white_listed_strings = "";
+  if (whitelists.length>0) {
+
+    for (var i = 0; i < whitelists.length; i++) {
+      white_listed_strings += "<span style='color:black;font-weight:900'> ("+(i + 1)+ ") </span>" + whitelists[i] + "<br><br>";
+    }
+  }
   logMessage("<span style='color:blue'>I found " + all_links.length + " links in total!</span>");
   logMessage("<span style='color:purple'>I found " + counter_for_target + " link/s that does not have target _blank! And "+(all_links.length - targets.length )+" completely missing target!</span>");
   logMessage("<span style='color:green'>I found " + valid_links.length + " links, which are OK!</span>");
   logMessage("<span style='color:orange'>I found " + invalid_links.length + " links, which might have problem with backslash!</span>");
   logMessage("<span style='color:red'>I found " + empty_links.length + " links, which are empty!</span>");
+ logMessage("<span style='color:violet'>I found " + whitelists.length + " links to be whitelisted!</span><br><span style='color:grey;font-size:9px;word-wrap: break-word;'>"+white_listed_strings+"</span>");
 }
 /*
 ============================
