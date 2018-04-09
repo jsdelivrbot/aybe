@@ -1,5 +1,5 @@
 /*
-VERSION 1.0.3 (HTML CHECKER UDPATED);
+VERSION 1.0.4 (QA Preview added);
 */
 /*GLOBAL VARIABLES*/
 let alertArray =[];
@@ -565,7 +565,7 @@ function aybe(){
  const option_load_read_file = "<option value='read_file' id='load_to_sparc'>Load Sparc To Emarsys</option>";
  const option_check_assets = "<option value='check_assets' id='asset_checker'>Check This HTML</option>";
  const option_message_center_helper = "<option value='mc_helper' id='mc_helper'>Run MC Helper</option>";
- const option_first_qa = "<option value='first_qa' id='first_qa'>Run QA</option>";;
+ const option_first_qa = "<option value='first_qa' id='first_qa'>Run QA review</option>";;
  const option_space = document.createElement("div");
  option_space.setAttribute("class","options_of_aybe");
  option_space.setAttribute("id", "id_of_options")
