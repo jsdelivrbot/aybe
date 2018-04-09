@@ -6,9 +6,17 @@ let alertArray =[];
 /*Init function*/
 (function() {
  'use strict';
-loadStyles(); //load Styles first
-createWindow(); // Load window after
-sparcInputsController(); // This function controlls all inputs
+ /*aYbe Appereance controller*/
+const getWindowHref = window.location.href.toString();
+console.log(getWindowHref);
+if (getWindowHref.match("file") || getWindowHref.match("CampaignSetup") || getWindowHref.match("ViewEbayRequestEm") || getWindowHref.match("broadcast")){
+  loadStyles(); //load Styles first
+  createWindow(); // Load window after
+  sparcInputsController(); // This function controlls all inputs
+}else {
+  console.log("aYbe is can not work for this site.");
+}
+
 }());
 /*
 ============================
@@ -564,9 +572,9 @@ function optionController(){
  else if (domain_path.match(/file/g)) {
    const read_file = document.getElementById("load_to_sparc").remove();
    const hide_download_ticket_option = document.getElementById("download_ticket_data").remove();
-   //const hide_review_ticket_data = document.getElementById("review_ticket_data").remove();
+   const hide_review_ticket_data = document.getElementById("review_ticket_data").remove();
    const mc_helper = document.getElementById("mc_helper").remove();
- // const hide_check_assets = document.getElementById("asset_checker").remove();
+   //const hide_check_assets = document.getElementById("asset_checker").remove();
    /*If Message Center*/
 }else if (domain_path.match(/CampaignSetup/g)) {
   const hide_download_ticket_option = document.getElementById("download_ticket_data").remove();
