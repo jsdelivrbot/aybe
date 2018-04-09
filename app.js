@@ -8,7 +8,6 @@ let alertArray =[];
  'use strict';
  /*aYbe Appereance controller*/
 const getWindowHref = window.location.href.toString();
-console.log(getWindowHref);
 if (getWindowHref.match("file") || getWindowHref.match("CampaignSetup") || getWindowHref.match("ViewEbayRequestEm") || getWindowHref.match("broadcast")){
   loadStyles(); //load Styles first
   createWindow(); // Load window after
@@ -33,7 +32,6 @@ function sparcInputsController(){
  const aybe_select = document.getElementById('aybe_select_options');
  aybe_select.oninput = function(){
    let results = aybe_select.options[aybe_select.options.selectedIndex].value;
-   console.log(results);
    if (results === "get_localstorage_data"){
    loadDataAndSave();
    }else if(results === "read_file"){
@@ -47,6 +45,8 @@ review_ticket();
      checkAssets();
    }else if (results === "mc_helper") {
      message_center_helper();
+   }else if (results === "first_qa") {
+     firstQA();
    }
  }
 }
@@ -110,7 +110,7 @@ function handleFiles(){
                      let cokoliv = reader.result;
                      let final_string = cokoliv.replace(/\"/g, "");
                      let arr_of_text = final_string.split(",");
-                     console.log(arr_of_text);
+
                      for(let i = 0;i<arr_of_text.length;i++){
                        const local_storage = localStorage.setItem(i,arr_of_text[i]);
                      }
@@ -136,7 +136,52 @@ function doubleDivPolice(){
 }
 
 
+function firstQA() {
+  let checkInput = "<input type='checkbox' class='reviewTicketCheckBox'>";
+  const getMainWindow = document.getElementById("window_content");
+  //Create main container
+  const reviewWindow = document.createElement("div");
+  reviewWindow.setAttribute("id","reviewWindow");
+  getMainWindow.appendChild(reviewWindow);
 
+  //Additional
+  const array_of_items = ["<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Read brief in SPARC <br>","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Auto filter recipients<br> (if Admin, to be unticked)","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Review import file and its columns","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> From And Reply Address <br>","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Subject line & Preheader","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Footer (if admin campaign = admin footer)","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Layout Desktop (Mobile)<br>(if multiple conditional content, with ignore conditions)","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Personalized fields populated with real data<br>","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Links: for T&C, Main CTA <br>","<input type='checkbox' name='reviewTicketCheckBox' class='reviewTicketCheckBox'> Conditional split % <br>and condition sense check"];
+  const create_ul = document.createElement("ul");
+  create_ul.setAttribute("id","sparc_list")
+  let final_string = "";
+  let k = 0;
+  for (k = 0;k<array_of_items.length;k++){
+    let li = document.createElement("li");
+    li.setAttribute("class","sparcList")
+    create_ul.appendChild(li);
+    li.innerHTML = array_of_items[k];
+  }
+  reviewWindow.appendChild(create_ul);
+  checkBoxQA();
+}
+function checkBoxQA() {
+  const reviewCheckBoxes = document.getElementsByClassName("reviewTicketCheckBox");
+  let lengthOfCheckBoxes = reviewCheckBoxes.length;
+  Array.from(reviewCheckBoxes).forEach(function(element) {
+      element.addEventListener('click', itemKiller);
+    });
+    function itemKiller(){
+      this.parentElement.style.background = "#51df5f5e";
+      this.checked = true;
+    let this_item = this;
+    let final_length = lengthOfCheckBoxes -= 1;
+    this.removeEventListener("click",itemKiller);
+      setTimeout(function () {
+        this_item.parentElement.remove();
+      }, 1000);
+if (final_length <= 0){
+  tutorialMessage("Perfect! It seems QA is done!");
+  setTimeout(function () {
+    clearThemAll();
+  }, 5000);
+}
+    }
+}
 
 /*
 Triggers event if "review ticket" is selected.
@@ -176,7 +221,6 @@ function review_ticket() {
 function checkBoxItemCare() {
   const reviewCheckBoxes = document.getElementsByClassName("reviewTicketCheckBox");
   let lengthOfCheckBoxes = reviewCheckBoxes.length;
-  console.log(lengthOfCheckBoxes);
   Array.from(reviewCheckBoxes).forEach(function(element) {
       element.addEventListener('click', itemKiller);
     });
@@ -189,7 +233,6 @@ function checkBoxItemCare() {
       setTimeout(function () {
         this_item.parentElement.remove();
       }, 1000);
-console.log(final_length);
 if (final_length <= 0){
   tutorialMessage("Good Job! Did you check also assets? I can help you with that!");
   setTimeout(function () {
@@ -209,7 +252,6 @@ function automatizedTicketReview() {
     const couponCheckInput = document.getElementById("emCoupon").children[0].checked;//coupon
     const mcCheckInput = document.getElementById("emEmail");//Message Center requested
     const mcExpirationDate = document.getElementById("emEmail");//Message Center requested
-  console.log(couponCheckInput);
     for (var i = 0; i < couponCheck.length; i++) {
       if ((couponCheck[i].innerText.trim() === "Coupon") && (couponCheckInput === true)) {
       alertThrower("Careful, this is coupon! This Campaign will have Tollgate and needs to be scheduled first 5% (or % which is specified by CM) after approval.");
@@ -268,7 +310,6 @@ if (isLitmus === true) {
 ============================
 */
 function checkAssets(){
-  console.log("Checking Assets");
   tutorialMessage("Please, look at highlighted links in HTML file. <br> <span style='color:green'>Green color</span> = good<br> <span style='color:purple'>Purple color</span> = WRONG!<br><span style='color:orange'>Orange</span> color = warning<br><span style='color:red'>Red</span> color - Almost 100% problem<br><span style='color:violet'>Violet</span> color - Read at <a style='border:0px solid' href='https://wiki.vip.corp.ebay.com/pages/viewpage.action?pageId=204420980' target='_blank'>Wiki</a>");
   checkAllTheLinks();
 }
@@ -373,7 +414,6 @@ function checkAllTheLinks() {
       white_listed_strings += "<span style='color:black;font-weight:900'> ("+(i + 1)+ ") </span>" + whitelists[i] + "<br><br>";
     }
   }
-//  console.log(deadAttributes);
   /*How Many deadAttributes*/
   let invalidAttributes = 0;
   for (var i = 0; i < deadAttributes.length; i++) {
@@ -430,7 +470,6 @@ getMainWindow.appendChild(createDiv);
 }());
 }
 function mc_helper_logic() {
-  console.log("i work");
 const mc_list = document.getElementById("distFileID"); //selects options in MC
 const mc_length = mc_list.length; //gets options in MC length
 const mc_text = mc_list.options[mc_list.selectedIndex].text; //Loads text at selected index
@@ -515,12 +554,6 @@ create_div.setAttribute("class","ahojky");
 create_div.setAttribute("id","window_content");
 first_div.appendChild(create_div);
 aybe();
-
-
-// const open_close_window = document.createElement("div");
-// open_close_window.setAttribute("id","open_close");
-// open_close_window.innerHTML = "<span class='open_close_class'>&#8645;</span>";
-// first_div.appendChild(open_close_window);
 }
 /*Setting up the aYbe*/
 function aybe(){
@@ -532,16 +565,15 @@ function aybe(){
  const option_load_read_file = "<option value='read_file' id='load_to_sparc'>Load Sparc To Emarsys</option>";
  const option_check_assets = "<option value='check_assets' id='asset_checker'>Check This HTML</option>";
  const option_message_center_helper = "<option value='mc_helper' id='mc_helper'>Run MC Helper</option>";
+ const option_first_qa = "<option value='first_qa' id='first_qa'>Run QA</option>";;
  const option_space = document.createElement("div");
  option_space.setAttribute("class","options_of_aybe");
  option_space.setAttribute("id", "id_of_options")
- option_space.innerHTML = "<select id='aybe_select_options'>" + option_do_noting + option_review_ticket + option_get_sparc_data + option_load_read_file+ option_check_assets+option_message_center_helper+"</select>";
+ option_space.innerHTML = "<select id='aybe_select_options'>" + option_do_noting + option_review_ticket + option_get_sparc_data + option_load_read_file+ option_check_assets+option_message_center_helper+option_first_qa+"</select>";
  const window_content = document.getElementById("window_content");
  window_content.appendChild(option_space);
  optionController();
  aybeSwitcher();
- // alertWindow();
- // modalWindowPreparation();
 }
 /*
 Displays options from aybe() function according domain name
@@ -558,6 +590,7 @@ function optionController(){
    const hide_review_ticket_data = document.getElementById("review_ticket_data").remove();
    const hide_check_assets = document.getElementById("asset_checker").remove();
     const mc_helper = document.getElementById("mc_helper").remove();
+    const qa_review = document.getElementById("first_qa").remove();
    // const read_file = document.getElementById("load_to_sparc").remove();
    displayMessages();
    /*IF SPARC*/
@@ -574,6 +607,7 @@ function optionController(){
    const hide_download_ticket_option = document.getElementById("download_ticket_data").remove();
    const hide_review_ticket_data = document.getElementById("review_ticket_data").remove();
    const mc_helper = document.getElementById("mc_helper").remove();
+   const qa_review = document.getElementById("first_qa").remove();
    //const hide_check_assets = document.getElementById("asset_checker").remove();
    /*If Message Center*/
 }else if (domain_path.match(/CampaignSetup/g)) {
@@ -581,7 +615,15 @@ function optionController(){
   const hide_review_ticket_data = document.getElementById("review_ticket_data").remove();
   const hide_check_assets = document.getElementById("asset_checker").remove();
   const read_file = document.getElementById("load_to_sparc").remove();
+  const qa_review = document.getElementById("first_qa").remove();
   // const mc_helper = document.getElementById("mc_helper").remove();
+}else {
+  const hide_download_ticket_option = document.getElementById("download_ticket_data").remove();
+  const hide_review_ticket_data = document.getElementById("review_ticket_data").remove();
+  const hide_check_assets = document.getElementById("asset_checker").remove();
+  const read_file = document.getElementById("load_to_sparc").remove();
+  const qa_review = document.getElementById("first_qa").remove();
+  const mc_helper = document.getElementById("mc_helper").remove();
 }
 }
 
@@ -609,7 +651,6 @@ toggle_div.addEventListener("click",window_switcher);
 let counter = 0;
 function window_switcher(){
   counter += 1;
-  console.log(counter);
   if (counter === 1) {
     toggle_div.innerHTML = "&Rang;";
     select_window.style.right = 0 + "px";
@@ -625,14 +666,11 @@ select_window.style.background = "white";
 }
 
 function clearThemAll() {
-  console.log("clearing everything");
   let get_info = document.getElementById('window_content').childNodes;
-  console.log(get_info);
   //remove all the children without first two children
 let length_of_get_info = get_info.length;
   for (let i = length_of_get_info -1 ;i>=2;i--){
      get_info[i].remove();
-    console.log(i);
   }
 let white_everything = document.getElementsByClassName('value inactive');
   for (let f = 0;f<white_everything.length;f++){
@@ -645,7 +683,6 @@ let white_everything = document.getElementsByClassName('value inactive');
       white_everything2[k].style.fontWeight = "normal";
     }
   const selectFirstOption = document.getElementById('aybe_select_options').options;
-  console.log(selectFirstOption);
     selectFirstOption.selectedIndex = 0;
     alertArray = [];
 alertWindow();
@@ -654,7 +691,6 @@ alertWindow();
 function loadStyles(){
 
  const style_app = document.createElement("style");
-   console.log(style_app);
  let first_div = document.getElementsByTagName("body")[0];
  const option_styles = "#id_of_options select{display:block;margin: 0 auto;}";
  const select_styles = "#aybe_select_options,#mc_input{padding: 4px;border-radius: 6px;color: #545454 !important;font-weight: bold;border: 2px solid #0bb1f1;}#mc_input{margin:0 auto;border:solid 1px;display:block;margin-top:5px;}";
@@ -675,7 +711,6 @@ const buttonForMC = "#copy_button{display:block;margin: 0 auto;margin-top: 5px;b
 if(typeof first_div === "undefined"){
   first_div = document.getElementsByTagName("body")[0];
 }
-console.log(first_div);
  first_div.appendChild(style_app);
 }
 
@@ -717,7 +752,6 @@ function alertThrower(item) {
   const alertDiv = document.getElementById("alertBox");
   alertArray.push(item);
   alertDiv.innerHTML = alertArray.length;
-  console.log(alertArray);
 }
 function itemAlertShow() {
   const clickOnAlertBox = document.getElementById("alertBox");
