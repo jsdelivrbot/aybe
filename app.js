@@ -1,5 +1,5 @@
 /*
-VERSION 1.0.5 (Planning ticket added);
+VERSION 1.0.6 (Couple of other fixes);
 */
 /*GLOBAL VARIABLES*/
 let alertArray =[];
@@ -13,7 +13,7 @@ if (getWindowHref.match("file") || getWindowHref.match("CampaignSetup") || getWi
   createWindow(); // Load window after
   sparcInputsController(); // This function controlls all inputs
 }else {
-  console.log("aYbe is can not work for this site.");
+  console.log("aYbe can not work for this site.");
 }
 
 }());
