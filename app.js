@@ -717,7 +717,7 @@ function loadStyles(){
  const select_styles = "#aybe_select_options,#mc_input{padding: 4px;border-radius: 6px;color: #545454 !important;font-weight: bold;border: 2px solid #0bb1f1;}#mc_input{margin:0 auto;border:solid 1px;display:block;margin-top:5px;}";
  const open_close = "#open_close {right: 0px;width: 200px;position: fixed;text-align: center;padding: 20px;top: 65px;color: red;font-size: 20px;font-weight: bold;}.open_close_class{border: 2px solid black;padding: 6px;border-radius: 50%;color: red;border-color: #ff0303;cursor: pointer;z-index: 9999;}"
  const dialog_window = "#dialog_space{font-size:11px;color:green;display:block;text-align:center;font-weight:bold}";
- const ul_li = ".reviewTicketCheckBox{margin:0;vertical-align:middle;position:absolute;left:23px;cursor:alias;}#sparc_list li{text-align: center;font-weight: 900;font-size: 11px;padding: 4px;margin-bottom: 3px;cursor: pointer;height: 30px;border: 2px solid #0bb1f1;margin-top: 3px;} ul#sparc_list{list-style-type:none;padding: 0px;}";
+ const ul_li = ".reviewTicketCheckBox{margin:0;vertical-align:middle;position:absolute;left:23px;cursor:alias;}#sparc_list li{text-align: center;font-weight: 900;font-size: 10px;padding: 4px;margin-bottom: 3px;cursor: pointer;height: 30px;border: 2px solid #0bb1f1;margin-top: 3px;} ul#sparc_list{list-style-type:none;padding: 0px;}";
  const sparc_number = "#numberOfSparcItems{text-align:center}";
  const jump_window = "#jump_window{position: absolute;top: 22px;left: 8px;font-size: 18px;font-weight: bold;cursor: pointer;color: #32b6f7;}";
  const wiki_styles = ".wiki_aybe{font-size:8px;text-transform:uppercase;color:grey;}";
