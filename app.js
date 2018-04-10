@@ -1,5 +1,5 @@
 /*
-VERSION 1.0.4 (QA Preview added);
+VERSION 1.0.5 (Planning ticket added);
 */
 /*GLOBAL VARIABLES*/
 let alertArray =[];
@@ -8,7 +8,7 @@ let alertArray =[];
  'use strict';
  /*aYbe Appereance controller*/
 const getWindowHref = window.location.href.toString();
-if (getWindowHref.match("file") || getWindowHref.match("CampaignSetup") || getWindowHref.match("ViewEbayRequestEm") || getWindowHref.match("broadcast")){
+if (getWindowHref.match("file") || getWindowHref.match("CampaignSetup") || getWindowHref.match("ViewEbayRequestEm") || getWindowHref.match("broadcast") || getWindowHref.match("teamPlanning")){
   loadStyles(); //load Styles first
   createWindow(); // Load window after
   sparcInputsController(); // This function controlls all inputs
@@ -47,6 +47,8 @@ review_ticket();
      message_center_helper();
    }else if (results === "first_qa") {
      firstQA();
+   }else if (results === "planning_ticket") {
+checkPlanningTicket();
    }
  }
 }
@@ -260,7 +262,6 @@ function automatizedTicketReview() {
   }());
   //MC Expiration Date if requested
   (function() {
-
     'use strict';
     const getMCValue = document.querySelector("[field-name='emEmail']");
     const getMCExpiration = document.querySelector("[field-name='emExpiryDate']");
@@ -301,6 +302,19 @@ if (isLitmus === true) {
       alertThrower("This is Recurring campaign. 2 emarsys IDs need to be created. 1st Adhoc one with 'AH' in ID name and 2nd with 'RE' in ID name.")
     }
   }());
+}
+
+function checkPlanningTicket() {
+//fix disappearing
+
+
+const getAllCancelled = document.getElementsByClassName("ticket-status");
+for (var i = 0; i < getAllCancelled.length; i++) {
+  console.log(getAllCancelled[i].innerHTML);
+  if(getAllCancelled[i].innerHTML === "Cancelled"){
+    getAllCancelled[i].parentElement.parentElement.parentElement.style.display = "none";
+  }
+}
 }
 /*
 ============================
@@ -565,11 +579,13 @@ function aybe(){
  const option_load_read_file = "<option value='read_file' id='load_to_sparc'>Load Sparc To Emarsys</option>";
  const option_check_assets = "<option value='check_assets' id='asset_checker'>Check This HTML</option>";
  const option_message_center_helper = "<option value='mc_helper' id='mc_helper'>Run MC Helper</option>";
- const option_first_qa = "<option value='first_qa' id='first_qa'>Run QA review</option>";;
+ const option_first_qa = "<option value='first_qa' id='first_qa'>Run QA review</option>";
+ const option_planning_ticket = "<option value='planning_ticket' id='planning_ticket'>Planning Controller</option>";
+
  const option_space = document.createElement("div");
  option_space.setAttribute("class","options_of_aybe");
  option_space.setAttribute("id", "id_of_options")
- option_space.innerHTML = "<select id='aybe_select_options'>" + option_do_noting + option_review_ticket + option_get_sparc_data + option_load_read_file+ option_check_assets+option_message_center_helper+option_first_qa+"</select>";
+ option_space.innerHTML = "<select id='aybe_select_options'>" + option_do_noting + option_review_ticket + option_get_sparc_data + option_load_read_file+ option_check_assets+option_message_center_helper+option_first_qa+option_planning_ticket+"</select>";
  const window_content = document.getElementById("window_content");
  window_content.appendChild(option_space);
  optionController();
@@ -591,6 +607,7 @@ function optionController(){
    const hide_check_assets = document.getElementById("asset_checker").remove();
     const mc_helper = document.getElementById("mc_helper").remove();
     const qa_review = document.getElementById("first_qa").remove();
+    const planning = document.getElementById("planning_ticket").remove();
    // const read_file = document.getElementById("load_to_sparc").remove();
    displayMessages();
    /*IF SPARC*/
@@ -598,6 +615,7 @@ function optionController(){
    const read_file = document.getElementById("load_to_sparc").remove();
    const hide_check_assets = document.getElementById("asset_checker").remove();
    const mc_helper = document.getElementById("mc_helper").remove();
+  // const planning = document.getElementById("planning_ticket").remove();
    // const hide_download_ticket_option = document.getElementById("download_ticket_data").remove();
    // const hide_review_ticket_data = document.getElementById("review_ticket_data").remove();
  }
@@ -608,6 +626,7 @@ function optionController(){
    const hide_review_ticket_data = document.getElementById("review_ticket_data").remove();
    const mc_helper = document.getElementById("mc_helper").remove();
    const qa_review = document.getElementById("first_qa").remove();
+   const planning = document.getElementById("planning_ticket").remove();
    //const hide_check_assets = document.getElementById("asset_checker").remove();
    /*If Message Center*/
 }else if (domain_path.match(/CampaignSetup/g)) {
@@ -616,6 +635,7 @@ function optionController(){
   const hide_check_assets = document.getElementById("asset_checker").remove();
   const read_file = document.getElementById("load_to_sparc").remove();
   const qa_review = document.getElementById("first_qa").remove();
+  const planning = document.getElementById("planning_ticket").remove();
   // const mc_helper = document.getElementById("mc_helper").remove();
 }else {
   const hide_download_ticket_option = document.getElementById("download_ticket_data").remove();
@@ -624,6 +644,7 @@ function optionController(){
   const read_file = document.getElementById("load_to_sparc").remove();
   const qa_review = document.getElementById("first_qa").remove();
   const mc_helper = document.getElementById("mc_helper").remove();
+  const planning = document.getElementById("planning_ticket").remove();
 }
 }
 
@@ -706,7 +727,7 @@ const appearBox = ".appearanything{position: absolute;top: 20%; left: 50%;font-s
 const alertBox = "#alertBox{position:absolute;top:0;right:10px;width:20px;line-height:20px;vertical-align:middle;background:#03a9f4;text-align:center;border-radius:50%;color:#ffffff;font-weight:bold;cursor:pointer;}"
 const modalAlertBox ="#modalWindowForAlert{color:#ffffffc9;background: #1577e7a3;position:fixed;left:30%;top:50%;width:500px;word-wrap:break-word;padding:14px;border: 1px solid;box-shadow: inset 0px 0px 2px 3px;}#modalWindowForAlert ul>li{list-style-type:none !important;}#modalWindowForAlert ul{padding:0px;margin:0px;}#closeModalWindowForAlert{position:absolute;right:7px;top:0px;padding:0px;margin:0px;color:red;font-weight:bold;font-size:20px;cursor:pointer;}";
 const buttonForMC = "#copy_button{display:block;margin: 0 auto;margin-top: 5px;background: white;padding: 4px;border-radius: 6px;color: #545454 !important;font-weight: bold; border: 2px solid #0bb1f1;}"
- style_app.innerHTML = buttonForMC+modalAlertBox+alertBox+appearBox+log_messages+custom_aybe_scrollbar+ wiki_styles+jump_window+sparc_number+ul_li+dialog_window+open_close+select_styles + ".ahojky{overflow-y: scroll;overflow-x: hidden;max-height:350px;box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);border-radius:6px;padding:20px;position:fixed;top:0px;right:0px;width:200px;height:auto;border:3px solid rgba(255,255,255,0.1);background-color:rgba(255,255,255,0.4);z-index:9999}.ahojky:hover{background-color:rgba(255,255,255,0.8);}" + option_styles;
+ style_app.innerHTML = buttonForMC+modalAlertBox+alertBox+appearBox+log_messages+custom_aybe_scrollbar+ wiki_styles+jump_window+sparc_number+ul_li+dialog_window+open_close+select_styles + ".ahojky{box-sizing: content-box;overflow-y: scroll;overflow-x: hidden;max-height:350px;box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);border-radius:6px;padding:20px;position:fixed;top:0px;right:0px;width:200px;height:auto;border:3px solid rgba(255,255,255,0.1);background-color:rgba(255,255,255,0.4);z-index:9999}.ahojky:hover{background-color:rgba(255,255,255,0.8);}" + option_styles;
 
 if(typeof first_div === "undefined"){
   first_div = document.getElementsByTagName("body")[0];
