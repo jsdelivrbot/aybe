@@ -263,7 +263,7 @@ function automatizedTicketReview() {
   //MC Expiration Date if requested
   (function() {
     'use strict';
-    const getMCValue = document.querySelector("[field-name='emEmail']");
+    const getMCValue = document.querySelector("[field-name='emMessageCenterNum']");
     const getMCExpiration = document.querySelector("[field-name='emExpiryDate']");
 if (getMCValue.getAttribute("field-value") !== "" && (getMCExpiration.getAttribute("field-value") === "")){
 alertThrower("MC is requested, but expiration date is missing");
@@ -307,14 +307,17 @@ if (isLitmus === true) {
 function checkPlanningTicket() {
 //fix disappearing
 
-
+const getHiddenCancelled = document.getElementsByClassName("ticket--has-aside");
+for (var p = 0; p < getHiddenCancelled.length; p++) {
+  getHiddenCancelled[p].classList.add("ticket--visible");
+}
 const getAllCancelled = document.getElementsByClassName("ticket-status");
 for (var i = 0; i < getAllCancelled.length; i++) {
-  console.log(getAllCancelled[i].innerHTML);
   if(getAllCancelled[i].innerHTML === "Cancelled"){
     getAllCancelled[i].parentElement.parentElement.parentElement.style.display = "none";
   }
 }
+
 }
 /*
 ============================
