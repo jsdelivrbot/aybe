@@ -10,4 +10,4 @@ function loadScript(url, callback)
     script.onload = callback;
     head.appendChild(script);
 }
-loadScript("https://rawgit.com/jaroslavhuss/aybe/master/app.js?version="+random_version,"callback");
+loadScript("https://cdn.jsdelivr.net/gh/jaroslavhuss/aybe@master/app.js?version="+random_version,"callback");
